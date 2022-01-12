@@ -1,25 +1,31 @@
-const { GraphQLObjectType, GraphQLInt, GraphQLString, GraphQLList } = require('graphql');
+const {
+  GraphQLObjectType,
+  GraphQLNonNull,
+  GraphQLID,
+  GraphQLString,
+  GraphQLList,
+} = require("graphql");
 
 const BreedType = new GraphQLObjectType({
-  name: 'Breed',
-  description: 'Breeds of cats',
+  name: "Breed",
+  description: "Breeds of cats",
   fields: {
     id: {
-      type: GraphQLInt,
+      type: new GraphQLNonNull(GraphQLID),
     },
     name: {
-      type: GraphQLString,
+      type: new GraphQLNonNull(GraphQLString),
     },
     vocalness: {
-      type: GraphQLString,
+      type: new GraphQLNonNull(GraphQLString),
     },
     temperament: {
       type: new GraphQLList(GraphQLString),
     },
     colors: {
       type: new GraphQLList(GraphQLString),
-    }
-  }
+    },
+  },
 });
 
 module.exports = BreedType;

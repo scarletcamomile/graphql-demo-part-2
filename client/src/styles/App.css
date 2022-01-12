@@ -4,20 +4,37 @@
   text-align: center;
 }
 
-.cats-container {
+.header {
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: space-evenly;
+  margin: 20px 0;
+  font-size: 25px;
+  font-family: monospace;
+}
+
+.container {
   display: flex;
   flex-flow: row wrap;
   justify-content: center;
   margin-top: 20px;
 }
 
-.cat-wrapper {
+.container-breeds {
+  flex-flow: column nowrap;
+}
+
+.wrapper {
   display: flex;
   flex-flow: column nowrap;
   border: 1px solid darkgrey;
   border-radius: 10px;
   margin: 10px;
   background-color: whitesmoke;
+}
+
+.wrapper-breeds {
+  flex-flow: row nowrap;
 }
 
 .cat-image {
@@ -44,6 +61,19 @@
   margin-top: 20px;
 }
 
+.radio-buttons-container {
+  display: flex;
+  font-family: monospace;
+}
+
+.radio-buttons-container p {
+  margin-right: 30px;
+}
+
+.radio-buttons-container label {
+  margin-right: 20px;
+}
+
 .error-container {
   background-color: #ff0000ba;
 }
@@ -51,4 +81,46 @@
 .error-message {
   font-family: monospace;
   padding: 5px 30px;
+}
+
+.breed-info {
+  width: 70%;
+}
+
+.message-list {
+  width: 60%;
+  margin: 0 auto;
+  padding: 15px;
+  display: flex;
+  flex-flow: column nowrap;
+  background: whitesmoke;
+  border-radius: 7px;
+}
+
+.message-list--with-cats {
+  background-image: url(../assets/cats.jpeg);
+}
+
+.message {
+  border: 2px solid darkgray;
+  border-radius: 7px;
+  background: #e5e4e4;
+  width: fit-content;
+  padding: 8px;
+  margin: 3px;
+}
+
+.message p {
+  margin: 0;
+}
+
+.message-author {
+  font-size: 16px;
+  text-align: left;
+  color: #e10099;
+  font-weight: 500;
+}
+
+.message-outgoing {
+  align-self: flex-end;
 }

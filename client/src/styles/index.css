@@ -38,4 +38,18 @@ button {
   color: white;
   font-size: 20px;
   font-family: monospace;
+  cursor: pointer;
+}
+
+label {
+  font-size: 18px;
+  font-family: monospace;
+}
+
+select {
+  font-size: 18px;
+  font-family: monospace;
+  height: 30px;
+  border: none;
+  margin: 10px 0;
 }
