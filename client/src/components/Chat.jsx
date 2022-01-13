@@ -1,47 +1,25 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useQuery } from "@apollo/client";
 import { GET_MESSAGES } from "../gql/queries/getMessages";
-import { MESSAGE_SUB } from "../gql/subscriptions/messageSub";
 import { MessageForm } from "./MessageForm";
-import { isCatsModeVar } from '../index';
 
 const OUTGOING = "message-outgoing";
 const INCOMING = "message-incoming";
 
 const Chat = () => {
-  const [username, setUsernameValue] = useState('');
+  const [username, setUsernameValue] = useState("");
   const [isUsernameSet, setUsername] = useState(false);
   const handleUsernameSubmit = (e) => {
     if (username) setUsername(true);
   };
-  const { data, loading, subscribeToMore } = useQuery(GET_MESSAGES);
-  useEffect(() => {
-    subscribeToMore({
-      document: MESSAGE_SUB,
-      updateQuery: (prev, { subscriptionData }) => {
-        if (!subscriptionData) {
-          return prev;
-        }
-        const newMessage = subscriptionData.data.newMessage;
-        const updatedMessageList = Object.assign({}, prev, {
-          messages: [...prev.messages, newMessage],
-        });
-        return updatedMessageList;
-      },
-    });
-  }, [subscribeToMore]);
-
-  const toggleCatsMode = () => {
-    const current = isCatsModeVar();
-    isCatsModeVar(!current); 
-  };
+  const { data, loading } = useQuery(GET_MESSAGES);
 
   if (loading) return "Loading...";
 
   return isUsernameSet ? (
     <>
-      <div className={isCatsModeVar() ? "message-list message-list--with-cats" : "message-list"}>
-        <button onClick={toggleCatsMode}>Add cats</button>
+      <div className="message-list">
+        <button>Add cats</button>
         {data.messages.map((message) => {
           const type = message.author === username ? OUTGOING : INCOMING;
           return (
@@ -54,9 +32,7 @@ const Chat = () => {
           );
         })}
       </div>
-      <MessageForm
-        username={username}
-      />
+      <MessageForm username={username} />
     </>
   ) : (
     <>
