@@ -1,4 +1,6 @@
 import { useState } from "react";
+import { useLazyQuery } from "@apollo/client";
+import { GET_CATS_BY_BREED } from "../gql/queries/getCatsByBreed";
 import { getRandomTag } from "../helpers/getRandomTag";
 import "../styles/App.css";
 
@@ -8,6 +10,19 @@ const Breed = ({
   setError,
 }) => {
   const [isCatsBlockOpen, setCatsBlockOpen] = useState(false);
+
+  const [getCatsByBreed, { loading, data }] = useLazyQuery(GET_CATS_BY_BREED);
+
+  const openCatsBlock = () => {
+    getCatsByBreed({
+      variables: { breedId: id },
+      onError: (err) => {
+        setError(true);
+        setErrorMessage(err.message);
+      }
+    });
+    setCatsBlockOpen(prevState => !prevState);
+  }
 
   const colorsToDisplay = colors.join(", ");
   const temperamentToDisplay = temperament.join(", ");
@@ -22,11 +37,11 @@ const Breed = ({
           <p>{vocalness}</p>
           <p>{colorsToDisplay}</p>
           <p>{temperamentToDisplay}</p>
-          <button>
+          <button onClick={openCatsBlock}>
             {isCatsBlockOpen ? "/\\" : "\\/"}
           </button>
         </div>
-{/*         {isCatsBlockOpen && !loading && (
+        {isCatsBlockOpen && !loading && (
           <div>
             {data?.cats?.edges?.map((cat) => {
               const {
@@ -41,10 +56,10 @@ const Breed = ({
               );
             })}
           </div>
-        )} */}
-{/*         {isCatsBlockOpen &&
+        )}
+        {isCatsBlockOpen &&
           !loading &&
-          (!data || data?.cats?.edges.length === 0) && <p>There are no cats</p>} */}
+          (!data || data?.cats?.edges.length === 0) && <p>There are no cats</p>}
       </div>
     </div>
   );

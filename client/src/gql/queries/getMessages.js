@@ -7,5 +7,6 @@ export const GET_MESSAGES = gql`
       body
       author
     }
+    isCatsMode @client
   }
 `;

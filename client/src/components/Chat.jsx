@@ -1,7 +1,9 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useQuery } from "@apollo/client";
 import { GET_MESSAGES } from "../gql/queries/getMessages";
 import { MessageForm } from "./MessageForm";
+import { MESSAGE_SUB } from '../gql/subscriptions/messageSub';
+import { isCatsModeVar } from '../index';
 
 const OUTGOING = "message-outgoing";
 const INCOMING = "message-incoming";
@@ -12,14 +14,35 @@ const Chat = () => {
   const handleUsernameSubmit = (e) => {
     if (username) setUsername(true);
   };
-  const { data, loading } = useQuery(GET_MESSAGES);
+  const { data, loading, subscribeToMore } = useQuery(GET_MESSAGES);
+
+  useEffect(() => {
+    subscribeToMore({
+      document: MESSAGE_SUB,
+      updateQuery: (prev, { subscriptionData }) => {
+        if (!subscriptionData) {
+          return prev;
+        }
+        const newMessage = subscriptionData?.data?.newMessage;
+        const updatedMessageList = Object.assign({}, prev, {
+          messages: [...prev.messages, newMessage],
+        });
+        return updatedMessageList;
+      }
+    });
+  }, [subscribeToMore]);
+
+  const toggleCatsMode = () => {
+    const current = isCatsModeVar();
+    isCatsModeVar(!current);
+  };
 
   if (loading) return "Loading...";
 
   return isUsernameSet ? (
     <>
-      <div className="message-list">
-        <button>Add cats</button>
+      <div className={isCatsModeVar() ? "message-list message-list--with-cats" : "message-list"}>
+        <button onClick={toggleCatsMode}>Add cats</button>
         {data.messages.map((message) => {
           const type = message.author === username ? OUTGOING : INCOMING;
           return (
